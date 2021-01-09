@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ys.model.dao.RepairMapper">
+  <resultMap id="BaseResultMap" type="com.ys.model.pojo.Repair">
+    <id column="r_id" jdbcType="INTEGER" property="rId" />
+    <result column="r_time" jdbcType="TIMESTAMP" property="rTime" />
+    <result column="r_content" jdbcType="VARCHAR" property="rContent" />
+    <result column="e_id" jdbcType="INTEGER" property="eId" />
+    <result column="r_people_id" jdbcType="INTEGER" property="rPeopleId" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    r_id, r_time, r_content, e_id, r_people_id
+  </sql>
+
+  <!--自定义********star-->
+  <resultMap id="searchVo" type="com.ys.model.vo.SearchVo">
+    <result column="eWorkshop" property="eWorkshop"/>
+    <result column="eMachine" property="eMachine"/>
+    <result column="eName" property="eName"/>
+    <result column="cName" property="cName"/>
+  </resultMap>
+
+  <resultMap id="repairDetailVo" type="com.ys.model.vo.RepairDetailVo">
+    <!--/*equipment的信息*/-->
+      <result column="eId"  property="eId"></result>
+      <result column="eWorkshop" property="eWorkshop"></result>
+      <result column="eMachine" property="eMachine"></result>
+      <result column="eName" property="eName"></result>
+      <result column="eCode" property="eCode"></result>
+      <result column="eType" property="eType"></result>
+      <result column="eFname" property="eFname"></result>
+    <!--/*component的信息*/-->
+      <result column="cId" property="cId"></result>
+      <result column="cName" property="cName"></result>
+      <result column="cCode" property="cCode"></result>
+      <result column="cType" property="cType"></result>
+      <result column="cFname" property="cFname"></result>
+    <!--/*repair的信息*/-->
+      <result column="rId" property="rId"></result>
+      <result column="uName" property="rPeopleName"></result>
+      <result column="rContent" property="rContent"></result>
+      <result column="rTime" property="rTime"></result>
+    <!--/*picture的信息*/-->
+      <result column="pName" property="pName"></result>
+
+  </resultMap>
+
+  <!--自己添加的sql方法-->
+  <!--维修查询List<RepairVo> repairSearchList();-->
+  <select id="repairSearchList" resultMap="searchVo">
+    SELECT e_workshop eWorkshop,e_machine eMachine,e_name eName,c_name cName
+    FROM ys_component c,ys_equipment e
+  </select>
+
+  <!--根据维修编号删除维修数据-->
+  <delete id="deleteRepairById" parameterType="java.lang.Integer" >
+        delete from ys_repair
+        where  r_id = #{rId,jdbcType=INTEGER}
+  </delete>
+
+  <!--查询功能：当查询字段都为空，则返回全部的列表信息，否则，返回符合条件的列表信息-->
+  <select id="search" parameterType="com.ys.model.request.RepairSearchReq" resultMap="repairDetailVo">
+    SELECT t1.e_id eId,t1.e_machine eMachine,t1.e_workshop eWorkshop,t1.e_type eType,t1.e_code eCode,t1.e_name eName,t1.f_name eFname,
+    t2.c_id cId,t2.c_name cName,t2.c_code cCode,t2.c_type cType,t2.f_name cFname,
+    t3.r_id rId,t3.u_name uName,t3.r_content rContent,t3.r_time rTime,
+    p.p_name
+    from
+      (SELECT e_workshop,e_machine,e_name,e_code,e_type,e_id,f_name
+        from ys_equipment LEFT JOIN ys_factory on ys_equipment.f_id = ys_factory.f_id and ys_factory.f_type = 1) t1,
+      (SELECT c_id,c_name,c_code,c_type,f_name,lifespan,starttime,c_location ,e_id
+        from ys_component LEFT JOIN ys_factory on ys_component.f_id = ys_factory.f_id and ys_factory.f_type = 2) t2 ,
+      (SELECT r_id,u_name,r_content,r_time,e_id
+        from ys_repair LEFT JOIN ys_user on ys_repair.r_people_id = ys_user.u_id) t3,
+      ys_pictures p
+    WHERE
+      t1.e_id = t2.e_id AND
+      t3.e_id = t1.e_id AND
+      p.p_r_id = t3.r_id
+      <if test="eWorkshop != null">
+        and  e_workshop = #{eWorkshop}
+      </if>
+      <if test="eMachine != null">
+        and e_machine = #{eMachine}
+      </if>
+      <if test="eName != null">
+        and e_name = #{eName}
+      </if>
+      <if test="cName != null">
+        and  c_name =#{cName}
+      </if>
+      <if test="uName != null">
+        and   u_name LIKE '%${uName}%'
+      </if>
+  </select>
+
+
+  <!--设备维修内容-->
+  <update id="equipmentRepairContent"  >
+    update  ys_repair
+    set r_content = #{r_content}
+    where e_id = #{e_id};
+  </update>
+
+  <!--根据设备id获得维修id，供上传维修图片用-->
+  <select id="getRepairId" resultType="java.lang.Integer">
+    select r_people_id from ys_repair
+    where e_id = #{e_id}
+  </select>
+
+  <!--上传维修图片-->
+  <insert id="repairPictures">
+    insert into ys_pictures(p_name,p_r_id)
+    values(#{p_name},#{p_r_id})
+  </insert>
+
+  <!--自定义********end-->
+<!--*************************************-->
+  <!--维修更新-->
+  <update id="updateByEidSelective" parameterType="com.ys.model.pojo.Repair">
+    update ys_repair
+    <set>
+      <if test="rTime != null">
+        r_time = #{rTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="rContent != null">
+        r_content = #{rContent,jdbcType=VARCHAR},
+      </if>
+      <if test="rPeopleId != null">
+        r_people_id = #{rPeopleId,jdbcType=INTEGER},
+      </if>
+    </set>
+    where r_id = #{rId,jdbcType=INTEGER}
+  </update>
+</mapper>

@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ys.model.dao.FactoryMapper">
+  <resultMap id="BaseResultMap" type="com.ys.model.pojo.Factory">
+    <id column="f_id" jdbcType="INTEGER" property="fId" />
+    <result column="f_name" jdbcType="VARCHAR" property="fName" />
+
+    <result column="f_type" jdbcType="VARCHAR" property="fType" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    f_id, f_name,  f_type
+  </sql>
+  <sql id="Base_Column_List1">
+    f.f_id, f_name,  f_type
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from ys_factory
+    where f_id = #{fId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from ys_factory
+    where f_id = #{fId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.ys.model.pojo.Factory">
+    insert into ys_factory (f_id, f_name,
+      f_type)
+    values (#{fId,jdbcType=INTEGER}, #{fName,jdbcType=VARCHAR},
+      #{fType,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.ys.model.pojo.Factory">
+    insert into ys_factory
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="fId != null">
+        f_id,
+      </if>
+      <if test="fName != null">
+        f_name,
+      </if>
+
+      <if test="fType != null">
+        f_type,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="fId != null">
+        #{fId,jdbcType=INTEGER},
+      </if>
+      <if test="fName != null">
+        #{fName,jdbcType=VARCHAR},
+      </if>
+
+      <if test="fType != null">
+        #{fType,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.ys.model.pojo.Factory">
+    update ys_factory
+    <set>
+      <if test="fName != null">
+        f_name = #{fName,jdbcType=VARCHAR},
+      </if>
+
+      <if test="fType != null">
+        f_type = #{fType,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where f_id = #{fId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.ys.model.pojo.Factory">
+    update ys_factory
+    set f_name = #{fName,jdbcType=VARCHAR},
+      f_type = #{fType,jdbcType=VARCHAR}
+    where f_id = #{fId,jdbcType=INTEGER}
+  </update>
+
+<!--  自定义sql语句-->
+  <insert id="insertE_FName">
+    insert into ys_factory(f_name,f_type)
+    values(#{fName},1)
+  </insert>
+  <insert id="insertC_FName">
+    insert into ys_factory(f_name,f_type)
+    values(#{fName},2)
+  </insert>
+  <select id="selectFid" parameterType="java.lang.String" resultType="java.lang.Integer">
+        select f_id
+        from ys_factory where f_name = #{f_name}
+        and f_type = #{f_type}
+  </select>
+  <select id="selectByFactoryName" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List"/>
+    from ys_factory
+    where f_name = #{fName,jdbcType=VARCHAR}
+  </select>
+
+<!-- *******自定义sql lhy******-->
+<!--  新增零件厂家-->
+  <insert id="insertCFName">
+    insert into ys_factory(f_name,f_type)
+    values(#{fName},2)
+  </insert>
+<!-- 根据厂家姓名和typ得到零件厂家id -->
+  <select id="getFid"  >
+        select f_id
+        from ys_factory where f_name = #{fName}
+        and f_type = #{fType}
+  </select>
+<!--  根据厂家fId 和 type 得到厂家名称getFname-->
+  <select id="getFname" parameterType="java.lang.Integer" resultType="java.lang.String" >
+    select f_name
+        from ys_factory where f_id = #{fId}
+        and f_type = #{fType}
+  </select>
+</mapper>

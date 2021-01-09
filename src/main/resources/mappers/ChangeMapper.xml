@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ys.model.dao.ChangeMapper">
+  <resultMap id="BaseResultMap" type="com.ys.model.pojo.Change">
+    <id column="c_id" jdbcType="INTEGER" property="cId" />
+    <result column="oc_name" jdbcType="VARCHAR" property="ocName" />
+      <result column="oc_type" jdbcType="VARCHAR" property="ocType" />
+   <result column="oc_factory" jdbcType="VARCHAR" property="ocFactory" />
+    <result column="oc_code" jdbcType="VARCHAR" property="ocCode" />
+    <result column="c_content" jdbcType="VARCHAR" property="cContent" />
+    <result column="c_time" jdbcType="TIMESTAMP" property="cTime" />
+    <result column="c_location" jdbcType="VARCHAR" property="cLocation" />
+    <result column="cc_id" jdbcType="INTEGER" property="ccId" />
+    <result column="c_people_id" jdbcType="INTEGER" property="cPeopleId" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    c_id, oc_name,oc_type,oc_factory, oc_code, c_content, c_time, c_location, cc_id,
+    c_people_id
+  </sql>
+    <insert id="insertSelective"></insert>
+    <insert id="insertOcomponent"></insert>
+
+    <resultMap id="changeDetailVo" type="com.ys.model.vo.ChangeDetailVo">
+        <!--/*equipment的信息*/-->
+        <result column="eId"  property="eId"></result>
+        <result column="eWorkshop" property="eWorkshop"></result>
+        <result column="eMachine" property="eMachine"></result>
+        <result column="eName" property="eName"></result>
+        <result column="eCode" property="eCode"></result>
+        <result column="eType" property="eType"></result>
+        <result column="eFname" property="eFname"></result>
+        <!--/*component的信息*/-->
+        <result column="cId" property="cId"></result>
+        <result column="cName" property="cName"></result>
+        <result column="cCode" property="cCode"></result>
+        <result column="cType" property="cType"></result>
+        <result column="cFname" property="cFname"></result>
+        <!--/*repair的信息*/-->
+        <result column="changeId" property="changeId"></result>
+        <result column="ocName" property="ocName"></result>
+        <result column="ocCode" property="ocCode"></result>
+        <result column="ocType" property="ocType"></result>
+        <result column="ocFactory" property="ocFactory"></result>
+        <result column="cuName" property="changePeopleName"></result>
+        <result column="cContent" property="changeContent"></result>
+        <result column="cTime" property="changeTime"></result>
+        <!--/*picture的信息*/-->
+        <result column="pName" property="pName"></result>
+
+    </resultMap>
+    <resultMap id="searchVo" type="com.ys.model.vo.SearchVo">
+        <result column="eWorkshop" property="eWorkshop"/>
+        <result column="eMachine" property="eMachine"/>
+        <result column="eName" property="eName"/>
+        <result column="cName" property="cName"/>
+    </resultMap>
+
+    <!--自定义********star-->
+  <!--更换查询列表List<ChangeVo> changeSearchList();-->
+  <select id="changeSearchList" resultMap="searchVo">
+    SELECT e_workshop eWorkshop,e_machine eMachine,e_name eName,c_name cName
+    FROM ys_component c,ys_equipment e
+  </select>
+
+  <!--根据更换编号删除更换数据-->
+  <delete id="deleteById" parameterType="java.lang.Integer" >
+        delete from ys_change
+        where c_id = #{cId,jdbcType=INTEGER}
+  </delete>
+
+  <!--查询功能-->
+  <select id="search" parameterType="com.ys.model.request.RepairSearchReq" resultMap="changeDetailVo">
+      SELECT t1.e_id eId,t1.e_machine eMachine,t1.e_workshop eWorkshop,t1.e_type eType,t1.e_code eCode,t1.e_name eName,t1.f_name eFname,
+      c.c_id changeId,c.oc_name ocName,c.oc_type ocType,c.oc_code ocCode,c.oc_factory ocFactory,
+          t2.c_id cId,t2.c_name cName,t2.c_code cCode,t2.c_type cType,t2.f_name cFname,
+          t3.c_id cId,t3.u_name cuName,t3.c_content cContent,t3.c_time cTime,
+          p.p_name pName
+      from
+          (SELECT e_workshop,e_machine,e_name,e_code,e_type,e_id,f_name
+            from ys_equipment LEFT JOIN ys_factory on ys_equipment.f_id = ys_factory.f_id and ys_factory.f_type = 1) t1,
+          (SELECT c_id,c_name,c_code,c_type,f_name,lifespan,starttime,c_location ,e_id
+            from ys_component LEFT JOIN ys_factory on ys_component.f_id = ys_factory.f_id and ys_factory.f_type = 2) t2 ,
+          (SELECT c_id,u_name,c_content,c_time,cc_id
+            from ys_change LEFT JOIN ys_user on ys_change.c_people_id = ys_user.u_id) t3,
+          ys_change c,
+          ys_pictures p
+      WHERE
+          t1.e_id = t2.e_id AND
+          t3.cc_id = t2.c_id AND
+          p.p_c_id = t3.c_id AND
+          c.cc_id = t2.c_id
+      <if test="eWorkshop != null">
+          and   e_workshop = #{eWorkshop}
+      </if>
+      <if test="eMachine != null">
+          and  e_machine = #{eMachine}
+      </if>
+      <if test="eName != null">
+          and   e_name = #{eName}
+      </if>
+      <if test="cName != null">
+          and  c_name =#{cName}
+      </if>
+      <if test="uName != null">
+          and   u_name LIKE '%${uName}%'
+      </if>
+  </select>
+
+  <!--自定义********end-->
+<!--***********************************-->
+    <update id="updateBySelective" parameterType="com.ys.model.pojo.Change">
+        update ys_component
+        <set>
+            <if test="newCname != null">
+                c_name = #{newCname,jdbcType=VARCHAR},
+            </if>
+            <if test="newCcode != null">
+                c_code = #{newCcode,jdbcType=VARCHAR},
+            </if>
+            <if test="newCtype != null">
+                c_type = #{newCtype,jdbcType=VARCHAR},
+            </if>
+            <if test="fId != null">
+                f_id = #{fId,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where cc_id = #{ccId,jdbcType=INTEGER}
+    </update>
+
+    <!--更换更新插入-->
+    <insert id="insert" parameterType="com.ys.model.pojo.Change">
+    insert into ys_change (c_id, oc_name, oc_type,
+      oc_factory, oc_code, c_content,
+      c_time, cc_id,
+      c_people_id)
+    values (#{cId,jdbcType=INTEGER}, #{ocName,jdbcType=VARCHAR}, #{ocType,jdbcType=VARCHAR},
+      #{ocFactory,jdbcType=VARCHAR}, #{ocCode,jdbcType=VARCHAR}, #{cContent,jdbcType=VARCHAR},
+      #{cTime,jdbcType=TIMESTAMP},  #{ccId,jdbcType=INTEGER},
+      #{cPeopleId,jdbcType=INTEGER})
+  </insert>
+</mapper>
