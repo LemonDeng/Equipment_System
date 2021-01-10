@@ -7,6 +7,7 @@ import com.ys.model.vo.MaintainDetailVo;
 import com.ys.model.vo.SearchVo;
 import org.apache.ibatis.annotations.Param;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -26,12 +27,8 @@ public interface MaintainService {
     //PageInfo search(Integer pageNum,Integer pageSize,String e_workshop,String e_machine,String e_name,String c_name,String u_name);
     PageInfo search(RepairSearchReq repairSearchReq);
 
-    //    /*设备维护 */
-//    void equipmentMaintain(Integer id);
-    /*得到维护id，供上传图片用*/
-    int getMaintainId(@Param("e_id") Integer eId);
+    /*根据设备维护内容获得维护id，供上传维护图片用getMaintainId*/
+    int getMaintainId(Maintain maintain);
     /*维护图片maintainPictures*/
-    void maintainPictures(String p_name, Integer p_m_id);
-    /*设备维护内容 equipmentMaintainContent*/
-    void equipmentMaintainContent(Integer eId, String content);
+    void maintainPictures(String pName, Integer pMId);
 }

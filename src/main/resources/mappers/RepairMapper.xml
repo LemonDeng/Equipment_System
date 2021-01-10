@@ -94,23 +94,16 @@
   </select>
 
 
-  <!--设备维修内容-->
-  <update id="equipmentRepairContent"  >
-    update  ys_repair
-    set r_content = #{r_content}
-    where e_id = #{e_id};
-  </update>
-
   <!--根据设备id获得维修id，供上传维修图片用-->
   <select id="getRepairId" resultType="java.lang.Integer">
-    select r_people_id from ys_repair
-    where e_id = #{e_id}
+    select r_id from ys_repair
+    where r_content = #{rContent}
   </select>
 
   <!--上传维修图片-->
   <insert id="repairPictures">
     insert into ys_pictures(p_name,p_r_id)
-    values(#{p_name},#{p_r_id})
+    values(#{pName},#{pRId})
   </insert>
 
   <!--自定义********end-->

@@ -23,10 +23,9 @@ public interface RepairService {
     /*维修查询列表*/
     List<SearchVo> repairSearchList();
 
-    /*设备维修内容 equipmentRepairContent*/
-    void equipmentRepairContent(Integer eId, String content);
-    /*得到维修id，供上传图片用*/
-    int getRepairId(Integer eId);
-    /*维修图片repairPictures*/
-    void repairPictures(String p_name, Integer p_r_id);
+
+    /*根据设备维修内容获得维护id，供上传维护图片用*/
+    int getRepairId(String rContent);
+    /*维修图片*/
+    void repairPictures(String pName, Integer pRId);
 }

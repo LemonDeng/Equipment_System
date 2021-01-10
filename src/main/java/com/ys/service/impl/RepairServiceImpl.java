@@ -58,6 +58,15 @@ public class RepairServiceImpl implements RepairService {
         return repairMapper.repairSearchList();
     }
 
+    @Override
+    public int getRepairId(String rContent) {
+        return repairMapper.getRepairId(rContent);
+    }
+
+    @Override
+    public void repairPictures(String pName, Integer pRId) {
+        repairMapper.repairPictures(pName,pRId);
+    }
 
 
     @Override
@@ -69,21 +78,5 @@ public class RepairServiceImpl implements RepairService {
     }
 
 
-
-    @Override
-    public void equipmentRepairContent(Integer eId, String content) {
-        repairMapper.equipmentRepairContent(eId,content);
-    }
-
-
-    @Override
-    public int getRepairId(Integer eId) {
-        return repairMapper.getRepairId(eId);
-    }
-
-    @Override
-    public void repairPictures(String p_name, Integer p_r_id) {
-        repairMapper.repairPictures(p_name,p_r_id);
-    }
 
 }

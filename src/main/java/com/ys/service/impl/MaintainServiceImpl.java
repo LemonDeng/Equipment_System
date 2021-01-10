@@ -17,6 +17,7 @@ import com.ys.service.MaintainService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -67,20 +68,15 @@ public class MaintainServiceImpl implements MaintainService {
         return p;
     }
 
-
-
     @Override
-    public int getMaintainId(Integer eId) {
-        return maintainMapper.getMaintainId(eId);
+    public int getMaintainId(Maintain maintain) {
+        return maintainMapper.getMaintainId(maintain);
     }
 
     @Override
-    public void maintainPictures(String p_name, Integer p_m_id) {
-        maintainMapper.maintainPictures(p_name,p_m_id);
+    public void maintainPictures(String pName, Integer pMId) {
+        maintainMapper.maintainPictures(pName,pMId);
     }
 
-    @Override
-    public void equipmentMaintainContent(Integer eId, String content) {
-        maintainMapper.equipmentMaintainContent(eId,content);
-    }
+
 }

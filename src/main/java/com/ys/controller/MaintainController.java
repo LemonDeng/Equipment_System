@@ -90,12 +90,4 @@ public class MaintainController {
 
 
 
-    @ApiOperation("设备维护内容和图片上传")
-    @PostMapping("/equipmentMaintainContentAndImages")
-    public ApiRestResponse equipmentMaintainContent(@RequestParam("e_id")Integer eId, @RequestParam("m_content") String content, @RequestParam("p_name") String iamgeName){
-        maintainService.equipmentMaintainContent(eId,content);
-        Integer p_m_id = maintainService.getMaintainId(eId);
-        maintainService.maintainPictures(iamgeName,p_m_id);
-        return new ApiRestResponse().success();
-    }
 }

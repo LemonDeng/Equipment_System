@@ -105,16 +105,16 @@
     set m_content = #{m_content}
     where e_id = #{e_id};
   </update>
-  <!--根据设备id获得维护id，供上传维护图片用-->
-  <select id="getMaintainId" resultType="java.lang.Integer">
-    select m_people_id from ys_maintain
-    where e_id = #{e_id}
+    <!--根据设备维护内容获得维护id，供上传维护图片用getMaintainId-->
+    <select id="getMaintainId" resultType="java.lang.Integer">
+    select m_id from ys_maintain
+    where m_content = #{mContent}
   </select>
 
-  <!--上传维护图片-->
-  <insert id="maintainPictures">
+    <!--上传维护图片-->
+    <insert id="maintainPictures">
     insert into ys_pictures(p_name,p_m_id)
-    values(#{p_name},#{p_m_id})
+    values(#{pName},#{pMId})
   </insert>
   <!--自定义********end-->
 <!--**************************-->

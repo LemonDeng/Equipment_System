@@ -3,15 +3,17 @@ package com.ys.controller;
 import com.github.pagehelper.PageInfo;
 import com.ys.common.ApiRestResponse;
 import com.ys.model.pojo.Maintain;
-import com.ys.model.pojo.Repair;
 import com.ys.model.request.ComponentChangeReq;
 import com.ys.model.request.RepairSearchReq;
-import com.ys.model.request.UpRepairReq;
-import com.ys.service.*;
+import com.ys.service.ComponentService;
+import com.ys.service.EquipmentService;
+import com.ys.service.FactoryService;
+import com.ys.service.MaintainService;
+import com.ys.service.impl.PicturesUploadServiceImpl;
 import io.swagger.annotations.ApiOperation;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 import java.text.SimpleDateFormat;
@@ -28,6 +30,8 @@ public class IndexController {
     FactoryService factoryService;
     @Autowired
     ComponentService componentService;
+    @Autowired
+    PicturesUploadServiceImpl picturesUploadService;
     @PostMapping("/allBaseList")
     @ApiOperation("基本数据分页列表 和 根据零件名筛选")
     @ResponseBody
@@ -39,19 +43,45 @@ public class IndexController {
 
     @PostMapping("/maintain")
     @ApiOperation("维护:需要eId、mContent")
-    @ResponseBody
-    public ApiRestResponse maintain(@Valid @RequestBody Maintain maintain) {
+    @ResponseBody  //@Valid @RequestBody Maintain maintain,
+    public ApiRestResponse maintain(@RequestParam("file") MultipartFile[] file, @RequestParam("eId") int eId, @RequestParam("mContent") String mContent) throws Exception{
         SimpleDateFormat formatter= new SimpleDateFormat("yyyy-MM-dd 'at' HH:mm:ss z");
         Date date = new Date(System.currentTimeMillis());
-        maintain.setmTime(date);
+        /*maintain.setmTime(date);
+        //添加维护内容
         equipmentService.maintain(maintain);
+        //根据维护内容得到维护id
+        int mId = maintainService.getMaintainId(maintain.getmContent());
+
+        //通过维护id作为外键插进picture表
+        String [] n = picturesUploadService.add(file);
+        for (String nn:n) {
+            maintainService.maintainPictures(nn,mId);
+        }*/
+
+        //单个参数传
+        Maintain maintain = new Maintain();
+        maintain.seteId(eId);
+        maintain.setmContent(mContent);
+        maintain.setmTime(date);
+        //添加维护内容
+        equipmentService.maintain(maintain);
+        //根据维护内容得到维护id
+        Date mTime = maintain.getmTime();
+        int mId = maintainService.getMaintainId(maintain);
+
+        //通过维护id作为外键插进picture表
+        String [] n = picturesUploadService.add(file);
+        for (String nn:n) {
+            maintainService.maintainPictures(nn,mId);
+        }
         return ApiRestResponse.success();
     }
 
     @PostMapping("/repairORchange")
     @ApiOperation("维护和更换:flag=1就是维护，flag=2就是更换")
     @ResponseBody
-    public ApiRestResponse repair(@Valid @RequestBody ComponentChangeReq changeReq) {
+    public ApiRestResponse repair(@RequestParam("file") MultipartFile[] file, @Valid @RequestBody ComponentChangeReq changeReq) throws Exception{
         SimpleDateFormat formatter= new SimpleDateFormat("yyyy-MM-dd 'at' HH:mm:ss z");
         Date date = new Date(System.currentTimeMillis());
         changeReq.setTime(date);
@@ -79,6 +109,15 @@ public class IndexController {
 
             //最后把新的零件信息更新到ys_component
             equipmentService.updateComponent(changeReq);
+        }
+        return ApiRestResponse.success();
+    }
+
+    @PostMapping("/uploadImage")
+    public ApiRestResponse add(@RequestParam("file") MultipartFile[] file) throws Exception{
+        String [] n = picturesUploadService.add(file);
+        for (String nn:n) {
+            System.out.println(nn);
         }
         return ApiRestResponse.success();
     }
