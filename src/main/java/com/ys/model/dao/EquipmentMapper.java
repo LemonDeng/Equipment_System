@@ -2,6 +2,7 @@ package com.ys.model.dao;
 
 import com.ys.model.pojo.Maintain;
 import com.ys.model.request.ComponentChangeReq;
+import com.ys.model.vo.BaseVo;
 import com.ys.model.vo.ComponentVo;
 import com.ys.model.pojo.Equipment;
 import com.ys.model.vo.EquipmentVo;
@@ -48,7 +49,7 @@ public interface EquipmentMapper {
     /*delete*/
     void delete(Integer id);
     /*基本数据分页列表 和 根据零件名筛选*/
-    List<ComponentVo> allBaseList(RepairSearchReq repairSearchReq);
+    List<BaseVo> allBaseList(RepairSearchReq repairSearchReq);
     /*根据二维码的设备编号得到设备和零件名称和零件型号*/
     //List<ComponentVo>selectByECode(@Param("e_code") String code);
     /*首页维护功能*/

@@ -141,12 +141,13 @@
     delete from ys_equipment
     where e_id = #{eId,jdbcType=INTEGER}
   </delete>
-  <resultMap id="componentVo" type="com.ys.model.vo.ComponentVo">
+  <resultMap id="componentVo" type="com.ys.model.vo.BaseVo">
     <result column="e_id" jdbcType="INTEGER" property="eId" />
     <result column="e_workshop" jdbcType="VARCHAR" property="eWorkshop"/>
     <result column="e_machine" jdbcType="VARCHAR" property="eMachine"/>
     <result column="e_name" jdbcType="VARCHAR" property="eName"/>
     <result column="e_code" jdbcType="VARCHAR" property="eCode"/>
+    <result column="c_id" jdbcType="INTEGER" property="cId" />
     <result column="c_name" jdbcType="VARCHAR" property="cName"/>
     <result column="c_code" jdbcType="VARCHAR" property="cCode"/>
     <result column="c_type" jdbcType="VARCHAR" property="cType"/>
@@ -175,7 +176,7 @@
 
   <!--首页基础数据分页列表 -->
   <select id="allBaseList" parameterType="com.ys.model.request.RepairSearchReq" resultMap="componentVo">
-    select e.e_id,e_workshop,e_machine,e_name,e_code,c_id,c_name,c_code
+    select e.e_id,e_workshop,e_machine,e_name,e_code,c_id,c_name,c_code,c_type
     from ys_equipment e ,ys_component c
     where c.e_id = e.e_id
     <if test="cName != null">

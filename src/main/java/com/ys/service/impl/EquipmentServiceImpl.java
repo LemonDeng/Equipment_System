@@ -10,6 +10,7 @@ import com.ys.model.pojo.Equipment;
 import com.ys.model.pojo.Maintain;
 import com.ys.model.request.ComponentChangeReq;
 import com.ys.model.request.RepairSearchReq;
+import com.ys.model.vo.BaseVo;
 import com.ys.model.vo.ComponentVo;
 import com.ys.model.vo.EquipmentVo;
 import com.ys.model.pojo.Factory;
@@ -125,7 +126,7 @@ public class EquipmentServiceImpl implements EquipmentService {
     @Override
     public PageInfo allBaseList(RepairSearchReq repairSearchReq) {
         PageHelper.startPage(repairSearchReq.getPageNum(),repairSearchReq.getPageSize());
-        List<ComponentVo> componentVos = equipmentMapper.allBaseList(repairSearchReq);
+        List<BaseVo> componentVos = equipmentMapper.allBaseList(repairSearchReq);
         PageInfo pageInfo = new PageInfo(componentVos);
         return pageInfo;
     }
