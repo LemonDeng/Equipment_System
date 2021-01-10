@@ -38,4 +38,8 @@ public interface UserMapper {
     //    修改密码
     int updateByKeySelective(User record);
 
+    /*token*/
+
+    UserVo findUserById(String uId);
+    UserVo findByUsername(String uName);
 }

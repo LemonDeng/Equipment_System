@@ -16,10 +16,10 @@ public class AdminFilterConfig {
     public FilterRegistrationBean adminFilterConfig() {
         FilterRegistrationBean filterRegistrationBean = new FilterRegistrationBean();
         filterRegistrationBean.setFilter(adminFilter());
-        filterRegistrationBean.addUrlPatterns("/admin/user/*");
+      /*  filterRegistrationBean.addUrlPatterns("/admin/user/*");
         filterRegistrationBean.addUrlPatterns("/admin/equipment/*");
         filterRegistrationBean.addUrlPatterns("/admin/component/*");
-        filterRegistrationBean.setName("adminFilterConf");
+        filterRegistrationBean.setName("adminFilterConf");*/
         return filterRegistrationBean;
     }
 }

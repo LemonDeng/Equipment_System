@@ -11,6 +11,7 @@ import com.ys.model.request.AddUserReq;
 import com.ys.model.request.UpdateUserReq;
 import com.ys.model.vo.UserLoginVO;
 import com.ys.service.UserService;
+import com.ys.service.impl.TokenService;
 import com.ys.util.CpachaUtil;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -20,6 +21,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -37,6 +39,8 @@ public class UserController {
     @Autowired
     UserService userService;
 
+    @Autowired
+    TokenService tokenService;
     /**
      *登录
      * @param userVo
@@ -48,7 +52,7 @@ public class UserController {
     @ResponseBody
     @ApiOperation(value = "登录",notes = "参数是一个人对象,date:内容为数据列表  classId:班级id")
 
-    public ApiRestResponse login(@RequestBody UserVo userVo, HttpSession session)
+    public ApiRestResponse login(@RequestBody UserVo userVo, HttpSession session,HttpServletResponse response)
             throws YsLjException {
         if (StringUtils.isEmpty(userVo.getuWorknumber())) {
             return ApiRestResponse.error(YsLjExceptionEnum.NEED_USER_NAME);
@@ -57,23 +61,36 @@ public class UserController {
             return ApiRestResponse.error(YsLjExceptionEnum.NEED_PASSWORD);
         }
         User user = userService.login(userVo);
+        String token = tokenService.getToken(userVo);
+        Cookie cookie = new Cookie("token", token);
+        cookie.setPath("/");
+        response.addCookie(cookie);
         //保存用户信息时，不保存密码
         user.setuPassword(null);
-        session.setAttribute(Constant.YS_USER, user);
+        session.setAttribute(token, user);
         return ApiRestResponse.success(user);
     }
-
     /**
      * 退出
      * @param session
+     * @param request
      * @return
      */
     @PostMapping("logout")
     @ResponseBody
-    public ApiRestResponse logout(HttpSession session) {
-        session.removeAttribute(Constant.YS_USER);
+    public ApiRestResponse logout(HttpSession session,HttpServletRequest request) {
+        String token  = "";
+
+        for (Cookie cookie : request.getCookies())
+            if (cookie.getName().equals("token")) {
+                token = cookie.getValue();
+                break;
+            }
+
+        session.removeAttribute(token);
         return ApiRestResponse.success();
     }
+
 
     /**
      * 添加用户

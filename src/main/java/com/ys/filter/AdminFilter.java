@@ -6,10 +6,7 @@ import com.ys.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.servlet.*;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpServletResponseWrapper;
-import javax.servlet.http.HttpSession;
+import javax.servlet.http.*;
 import java.io.IOException;
 import java.io.PrintWriter;
 
@@ -33,7 +30,23 @@ public class AdminFilter implements Filter {
             throws IOException, ServletException {
         HttpServletRequest request = (HttpServletRequest) servletRequest;
         HttpSession session = request.getSession();
-        User currentUser = (User) session.getAttribute(Constant.YS_USER);
+
+        String uri =  request.getRequestURI();
+        if ("/user/login".equals(uri)) {
+            filterChain.doFilter(servletRequest, servletResponse);
+            return;
+        }
+
+        Cookie[] cookies = request.getCookies();
+        String token  = "";
+        for (Cookie cookie : cookies) {
+            if (cookie.getName().equals("token")) {
+                token = cookie.getValue();
+                break;
+            }
+        }
+
+        User currentUser = (User) session.getAttribute(token);
         if (currentUser == null) {
             servletResponse.setContentType("text/html;charset=utf-8");
             PrintWriter out = new HttpServletResponseWrapper(
