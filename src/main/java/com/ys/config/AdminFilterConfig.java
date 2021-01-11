@@ -16,10 +16,15 @@ public class AdminFilterConfig {
     public FilterRegistrationBean adminFilterConfig() {
         FilterRegistrationBean filterRegistrationBean = new FilterRegistrationBean();
         filterRegistrationBean.setFilter(adminFilter());
-      /*  filterRegistrationBean.addUrlPatterns("/admin/user/*");
-        filterRegistrationBean.addUrlPatterns("/admin/equipment/*");
-        filterRegistrationBean.addUrlPatterns("/admin/component/*");
-        filterRegistrationBean.setName("adminFilterConf");*/
+        filterRegistrationBean.addUrlPatterns("/user/deleteUser");
+        filterRegistrationBean.addUrlPatterns("/user/listUser");
+        filterRegistrationBean.addUrlPatterns("/user/updateUser");
+        filterRegistrationBean.addUrlPatterns("/user/getUser");
+        filterRegistrationBean.addUrlPatterns("/equipment/*");
+        filterRegistrationBean.addUrlPatterns("/component/*");
+        filterRegistrationBean.addUrlPatterns("/change/*");
+        filterRegistrationBean.setName("adminFilterConf");
+
         return filterRegistrationBean;
     }
 }

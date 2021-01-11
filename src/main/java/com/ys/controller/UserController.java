@@ -50,7 +50,7 @@ public class UserController {
      */
     @PostMapping("/login")
     @ResponseBody
-    @ApiOperation(value = "登录",notes = "参数是一个人对象,date:内容为数据列表  classId:班级id")
+    @ApiOperation(value = "登录",notes = "uWorknumber:工号(require)   uPassword:密码 (require)")
 
     public ApiRestResponse login(@RequestBody UserVo userVo, HttpSession session,HttpServletResponse response)
             throws YsLjException {
@@ -70,6 +70,8 @@ public class UserController {
         session.setAttribute(token, user);
         return ApiRestResponse.success(user);
     }
+
+
     /**
      * 退出
      * @param session
@@ -91,7 +93,6 @@ public class UserController {
         return ApiRestResponse.success();
     }
 
-
     /**
      * 添加用户
      * @param
@@ -101,9 +102,17 @@ public class UserController {
     @ApiOperation("添加用户")
     @PostMapping("/addUser")
     @ResponseBody
-    public ApiRestResponse addUser(HttpSession session,@Valid @RequestBody AddUserReq addUserReq)
+    public ApiRestResponse addUser(HttpSession session,@Valid @RequestBody AddUserReq addUserReq,HttpServletRequest request)
             throws YsLjException {
-        User currentUser = (User) session.getAttribute(Constant.YS_USER);
+
+        String token  = "";
+
+        for (Cookie cookie : request.getCookies())
+            if (cookie.getName().equals("token")) {
+                token = cookie.getValue();
+                break;
+            }
+        User currentUser = (User) session.getAttribute(token);
         if (currentUser == null)
         {
             return ApiRestResponse.error(YsLjExceptionEnum.NEED_LOGIN);
@@ -148,39 +157,24 @@ public class UserController {
         return ApiRestResponse.success(pageInfo);
     }
 
-    //查询所有用户
-    //*
-    @GetMapping("/inquireUser")
-    @ResponseBody
-    public ApiRestResponse inquire(HttpSession session)throws YsLjException
-    {
-        User currentUser = (User)session.getAttribute(Constant.YS_USER);
-        if (currentUser == null)
-        {
-            return ApiRestResponse.error(YsLjExceptionEnum.NEED_LOGIN);
-        }
-        //校验是否是管理员
-        boolean adminRole = userService.checkAdminRole(currentUser);
-        if (adminRole) {
-            //是管理员，执行操作
-            List<User> user = userService.getAllUser();
-            return ApiRestResponse.success(user);
-        }else
-        {
-            return ApiRestResponse.error(YsLjExceptionEnum.NEED_ADMIN);
-        }
 
-    }
     /**
      * 修改用户
      */
     @ApiOperation("修改用户")
     @PostMapping("/updateUser")
     @ResponseBody
-    public ApiRestResponse updateUser(@Valid @RequestBody UpdateUserReq updateUserReq, HttpSession session) {
+    public ApiRestResponse updateUser(@Valid @RequestBody UpdateUserReq updateUserReq, HttpSession session,HttpServletRequest request) {
 
+        String token  = "";
 
-        User currentUser = (User) session.getAttribute(Constant.YS_USER);
+        for (Cookie cookie : request.getCookies())
+            if (cookie.getName().equals("token")) {
+                token = cookie.getValue();
+                break;
+            }
+
+        User currentUser = (User) session.getAttribute(token);
         if (currentUser == null)
         {
             return ApiRestResponse.error(YsLjExceptionEnum.NEED_LOGIN);

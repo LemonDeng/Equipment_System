@@ -12,8 +12,9 @@ import java.io.PrintWriter;
 
 
 /**
- * 描述：     管理员校验过滤器
- */
+ * 描述：     管理员校验过滤器*/
+
+
 public class AdminFilter implements Filter {
 
     @Autowired
