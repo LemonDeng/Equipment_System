@@ -1,5 +1,7 @@
 package com.ys.model.pojo;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import java.util.Date;
 
 public class ChangeVo {
@@ -19,7 +21,7 @@ public class ChangeVo {
     private String changePeople;
 
     private String cLocation;
-
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone="GMT+8")
     private Date startTime;
 
     private int cid;

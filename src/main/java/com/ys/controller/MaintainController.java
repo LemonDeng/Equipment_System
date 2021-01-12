@@ -28,7 +28,7 @@ public class MaintainController {
     @Autowired
     MaintainService maintainService;
 
-    @ApiOperation("维护更新")
+    @ApiOperation(value = "维护更新",notes = "mId:维护id(int)mPeopleName:维护人员(String)mTime:维护时间 (require)mContent:维护内容(String)eId:设备id(String)")
     @PostMapping("/update")
     @ResponseBody
     public ApiRestResponse maintainUpdate(@Valid @RequestBody UpdateMaintainReq updateMaintainReq)

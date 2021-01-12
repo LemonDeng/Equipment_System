@@ -30,7 +30,7 @@ public class RepairController {
      * @param upRepairReq
      * @return
      */
-    @ApiOperation("维修更新")
+    @ApiOperation(value = "维修更新",notes = "cId:维修的更新(String) rTime:维修时间(Date)rContent:维修内容(String)rPeopleName:维修人员")
     @PostMapping("/update")
     @ResponseBody
     public ApiRestResponse updateRepair(@Valid @RequestBody UpRepairReq upRepairReq)

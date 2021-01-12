@@ -29,10 +29,11 @@ public class EquipmentController {
     EquipmentService equipmentService;
 
     /**
-     * 增加设备
-     *
+     * 设备新增
+     * @param equipmentVo
+     * @return
      */
-    @ApiOperation("添加设备")
+    @ApiOperation(value = "设备新增",notes = "eWorkshop:车间(String)eMachine:机台号(String)eName:设备名字(String)eCode:设备编码(String)eType:设备型号(String)fName:设备厂家(String)")
     @PostMapping("/addEquipment")
     @ResponseBody
     public ApiRestResponse addEquipment(@RequestBody EquipmentVo equipmentVo) {

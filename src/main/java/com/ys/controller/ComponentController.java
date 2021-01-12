@@ -32,7 +32,8 @@ public class ComponentController {
      * 新增零件信息
      *
      */
-    @ApiOperation("新增零件信息")
+    @ApiOperation(value = "零件新增",notes = "eId:(设备id)cName:零件名称(String)cType:零件类型 (String)cCode:零件的编码(String)" +
+            "fName:零件厂家(String)cLocation:零件位置(String)lifespan:使用寿命(String)starttime:开始使用时间(String)")
     @PostMapping("/addComponent")
     @ResponseBody
     public ApiRestResponse addComponent(@Valid @RequestBody Component component)

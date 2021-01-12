@@ -74,14 +74,14 @@ public class EquipmentServiceImpl implements EquipmentService {
      */
     @Override
     public void updateEquipment(Equipment equipment) {
-        if (equipment.geteCode() != null)
+     /*   if (equipment.geteCode() != null)
         {
             Equipment equipmentOld = equipmentMapper.selectByCode(equipment.geteCode());
             if (equipmentOld != null)
             {
                 throw new YsLjException(YsLjExceptionEnum.CODE_EXISTED);
             }
-        }
+        }*/
         if (factoryMapper.selectByFactoryName(equipment.getE_fName()) != null)
         {
             int count = equipmentMapper.updateByPrimaryKeySelective(equipment);

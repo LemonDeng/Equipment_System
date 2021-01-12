@@ -14,6 +14,8 @@ import com.ys.model.request.RepairSearchReq;
 import com.ys.model.vo.SearchVo;
 import com.ys.service.ComponentService;
 import com.ys.util.DateUtils;
+
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -33,6 +35,9 @@ public class ComponentServiceImpl implements ComponentService {
 
     @Autowired
     EquipmentMapper equipmentMapper;
+
+ /*  @Autowired
+    QRCodeUtils qrCodeUtils;*/
 
     /**
      * 新增零件
@@ -83,14 +88,14 @@ public class ComponentServiceImpl implements ComponentService {
      */
     @Override
     public void updateComponent(Component component) {
-        if (component.getcCode() != null)
+       /* if (component.getcCode() != null)
         {
             Component componentOld = componentMapper.selectByCode(component.getcCode());
             if (componentOld != null)
             {
                 throw new YsLjException(YsLjExceptionEnum.CODE_EXISTED);
             }
-        }
+        }*/
         if (factoryMapper.selectByFactoryName(component.getfName()) != null)
         {
             int count = componentMapper.updateByPrimaryKeySelective(component);
@@ -157,4 +162,14 @@ public class ComponentServiceImpl implements ComponentService {
 
         return componentMapper.getFidByCid(cId);
     }
+    /**
+     * 二维码
+     */
+   /* public ApiOperation saveComponent(ComponentVo componentVo){
+
+        String qrCodePath = "c://"+componentVo.getcCode()+"qrcode.png";
+        qrCodeUtils.createQRCode(qrCodePath,"ysdb:"+componentVo.getcName());
+        componentVo.
+
+    }*/
 }

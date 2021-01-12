@@ -30,6 +30,7 @@ public class ChangeController {
      * @param changeVo
      * @return
      */
+    @ApiOperation(value = "更换更新",notes = "cid:零件的id(int)---ewCname:新零件名称(String)---newCtype:新零件型号 (String)--newCfactory:新零件厂家(String)--newCcode:新零件编码(String)--cLocation:位置(String)--changePeople:更换人员(String)--startTime:更换时间(Date)")
     @PostMapping("/update")
     @ResponseBody
     public ApiRestResponse updateChange(@Valid @RequestBody ChangeVo changeVo)

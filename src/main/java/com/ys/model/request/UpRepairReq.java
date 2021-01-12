@@ -1,10 +1,12 @@
 package com.ys.model.request;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import java.util.Date;
 
 public class UpRepairReq {
     private Integer rId;
-
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone="GMT+8")
     private Date rTime;
 
     private String rContent;
