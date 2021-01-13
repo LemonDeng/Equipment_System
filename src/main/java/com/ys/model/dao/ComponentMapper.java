@@ -52,6 +52,9 @@ public interface ComponentMapper {
     /*查询下拉列表*/
     List<SearchVo>  componentSearchList();
 
+    /*得到所有的零件名*/
+    List<SearchVo> allCName();
+
     /*根据零件cId，得到厂家fId */
     int getFidByCid(int cId);
 

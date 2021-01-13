@@ -33,4 +33,7 @@ public interface ComponentService {
 
     /*根据零件cId，得到厂家fId */
     int getFidByCid(int cId);
+    /*得到所有的零件名*/
+    /*得到所有的零件名*/
+    List<SearchVo> allCName();
 }

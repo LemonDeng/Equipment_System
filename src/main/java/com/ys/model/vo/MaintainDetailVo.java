@@ -38,7 +38,7 @@ public class MaintainDetailVo {
     private String mPeopleName;
 
     private String mContent;
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
+
     private Date mTime;
 
     /*picture的信息*/

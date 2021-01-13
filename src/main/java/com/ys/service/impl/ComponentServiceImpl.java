@@ -162,6 +162,11 @@ public class ComponentServiceImpl implements ComponentService {
 
         return componentMapper.getFidByCid(cId);
     }
+
+    @Override
+    public  List<SearchVo> allCName() {
+        return componentMapper.allCName();
+    }
     /**
      * 二维码
      */

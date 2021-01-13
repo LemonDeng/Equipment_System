@@ -26,6 +26,10 @@
         <result column="eName" property="eName"/>
         <result column="cName" property="cName"/>
     </resultMap>
+
+    <resultMap id="allCNameVo" type="com.ys.model.vo.SearchVo">
+        <result column="cName" property="cName"/>
+    </resultMap>
     <sql id="Base_Column_List">
     c_id, c_name, c_type,c_code, lifespan, starttime, e_id, f_id,c_location
   </sql>
@@ -262,6 +266,11 @@
         select f_id
         from ys_component
         where c_id = #{cId}
+    </select>
+
+    <!--查询所有的零件名-->
+    <select id="allCName"  resultMap="allCNameVo">
+        select c_name cName from ys_component
     </select>
     <!--自定义********end-->
 </mapper>

@@ -49,6 +49,8 @@ public class ChangeDetailVo {
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private Date changeTime;
 
+    private String cLocation;
+
 
 
     /*picture的信息*/
@@ -59,6 +61,13 @@ public class ChangeDetailVo {
     /*user的信息*/
     private Integer uId;
     private String uName;
+    public String getcLocation() {
+        return cLocation;
+    }
+
+    public void setcLocation(String cLocation) {
+        this.cLocation = cLocation;
+    }
 
     public Integer geteId() {
         return eId;

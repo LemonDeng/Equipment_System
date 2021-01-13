@@ -44,6 +44,7 @@
         <result column="cuName" property="changePeopleName"></result>
         <result column="cContent" property="changeContent"></result>
         <result column="cTime" property="changeTime"></result>
+        <result column="cLocation" property="cLocation"></result>
         <!--/*picture的信息*/-->
         <result column="pName" property="pName"></result>
 
@@ -72,7 +73,7 @@
   <select id="search" parameterType="com.ys.model.request.RepairSearchReq" resultMap="changeDetailVo">
       SELECT t1.e_id eId,t1.e_machine eMachine,t1.e_workshop eWorkshop,t1.e_type eType,t1.e_code eCode,t1.e_name eName,t1.f_name eFname,
       c.c_id changeId,c.oc_name ocName,c.oc_type ocType,c.oc_code ocCode,c.oc_factory ocFactory,
-          t2.c_id cId,t2.c_name cName,t2.c_code cCode,t2.c_type cType,t2.f_name cFname,
+          t2.c_id cId,t2.c_name cName,t2.c_code cCode,t2.c_type cType,t2.f_name cFname,t2.c_location cLocation,
           t3.c_id cId,t3.u_name cuName,t3.c_content cContent,t3.c_time cTime,
           p.p_name pName
       from

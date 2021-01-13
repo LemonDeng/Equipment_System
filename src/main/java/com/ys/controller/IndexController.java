@@ -1,10 +1,12 @@
 package com.ys.controller;
 
+import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageInfo;
 import com.ys.common.ApiRestResponse;
 import com.ys.model.pojo.Maintain;
 import com.ys.model.request.ComponentChangeReq;
 import com.ys.model.request.RepairSearchReq;
+import com.ys.model.vo.SearchVo;
 import com.ys.service.ComponentService;
 import com.ys.service.EquipmentService;
 import com.ys.service.FactoryService;
@@ -17,7 +19,9 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @RestController
 @RequestMapping("/index")
@@ -40,9 +44,23 @@ public class IndexController {
         return ApiRestResponse.success(page);
     }
 
+    @GetMapping("/allCName")
+    @ApiOperation(value = "零件名下列列表")
+    @ResponseBody
+    public ApiRestResponse allCName() {
+        List<SearchVo> cNameVo = componentService.allCName();
+        JSONObject object = new JSONObject();
+        //将机台、设备等对应放进一个list集合
+        List<String> cNames =  new ArrayList<>();
+        for(SearchVo searchVo : cNameVo){
+            cNames.add(searchVo.getcName());
+        }
+        object.put("cNames",cNames);
+        return ApiRestResponse.success(object);
+    }
 
     @PostMapping("/maintain")
-    @ApiOperation("维护:需要eId、mContent")
+    @ApiOperation(value = "维护" ,notes = "eId设备id（require）、mContent维护内容（require）")
     @ResponseBody  //@Valid @RequestBody Maintain maintain,
     public ApiRestResponse maintain(@RequestParam("file") MultipartFile[] file, @RequestParam("eId") int eId, @RequestParam("mContent") String mContent) throws Exception{
         SimpleDateFormat formatter= new SimpleDateFormat("yyyy-MM-dd 'at' HH:mm:ss z");
