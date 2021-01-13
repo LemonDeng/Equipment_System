@@ -1,6 +1,7 @@
 package com.ys.model.pojo;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Date;
 
@@ -20,6 +21,16 @@ public class Maintain {
     private Integer pageNum;
 
     private Integer pageSize;
+
+    private MultipartFile[] file;
+
+    public MultipartFile[] getFile() {
+        return file;
+    }
+
+    public void setFile(MultipartFile[] file) {
+        this.file = file;
+    }
 
     public Integer getPageNum() {
         return pageNum;

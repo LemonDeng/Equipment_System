@@ -7,10 +7,7 @@ import com.ys.model.pojo.Maintain;
 import com.ys.model.request.ComponentChangeReq;
 import com.ys.model.request.RepairSearchReq;
 import com.ys.model.vo.SearchVo;
-import com.ys.service.ComponentService;
-import com.ys.service.EquipmentService;
-import com.ys.service.FactoryService;
-import com.ys.service.MaintainService;
+import com.ys.service.*;
 import com.ys.service.impl.PicturesUploadServiceImpl;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +27,8 @@ public class IndexController {
     EquipmentService equipmentService;
     @Autowired
     MaintainService maintainService;
+    @Autowired
+    RepairService repairService;
     @Autowired
     FactoryService factoryService;
     @Autowired
@@ -61,24 +60,25 @@ public class IndexController {
 
     @PostMapping("/maintain")
     @ApiOperation(value = "维护" ,notes = "eId设备id（require）、mContent维护内容（require）")
-    @ResponseBody  //@Valid @RequestBody Maintain maintain,
-    public ApiRestResponse maintain(@RequestParam("file") MultipartFile[] file, @RequestParam("eId") int eId, @RequestParam("mContent") String mContent) throws Exception{
+    @ResponseBody  //@Valid @RequestBody Maintain maintain,@RequestParam("file") MultipartFile[] file,
+    public ApiRestResponse maintain( @Valid @RequestBody Maintain maintain) throws Exception{
         SimpleDateFormat formatter= new SimpleDateFormat("yyyy-MM-dd 'at' HH:mm:ss z");
         Date date = new Date(System.currentTimeMillis());
-        /*maintain.setmTime(date);
+        maintain.setmTime(date);
         //添加维护内容
         equipmentService.maintain(maintain);
         //根据维护内容得到维护id
-        int mId = maintainService.getMaintainId(maintain.getmContent());
+        int mId = maintainService.getMaintainId(maintain);
 
         //通过维护id作为外键插进picture表
-        String [] n = picturesUploadService.add(file);
+        String [] n = picturesUploadService.add(maintain.getFile());
         for (String nn:n) {
             maintainService.maintainPictures(nn,mId);
-        }*/
+        }
 
         //单个参数传
-        Maintain maintain = new Maintain();
+
+        /*Maintain maintain = new Maintain();
         maintain.seteId(eId);
         maintain.setmContent(mContent);
         maintain.setmTime(date);
@@ -92,19 +92,27 @@ public class IndexController {
         String [] n = picturesUploadService.add(file);
         for (String nn:n) {
             maintainService.maintainPictures(nn,mId);
-        }
+        }*/
         return ApiRestResponse.success();
     }
 
     @PostMapping("/repairORchange")
     @ApiOperation("维护和更换:flag=1就是维护，flag=2就是更换")
     @ResponseBody
-    public ApiRestResponse repair(@RequestParam("file") MultipartFile[] file, @Valid @RequestBody ComponentChangeReq changeReq) throws Exception{
+    public ApiRestResponse repair(@Valid @RequestBody ComponentChangeReq changeReq) throws Exception{
         SimpleDateFormat formatter= new SimpleDateFormat("yyyy-MM-dd 'at' HH:mm:ss z");
         Date date = new Date(System.currentTimeMillis());
         changeReq.setTime(date);
         if(changeReq.getFlag() == 1){//维护：只需添加维护内容
             equipmentService.repair(changeReq);
+            //根据维护内容得到维护id
+            int rId = repairService.getRepairId(changeReq.getContent());
+
+            //通过维护id作为外键插进picture表
+            String [] n = picturesUploadService.add(changeReq.getFile());
+            for (String nn:n) {
+                repairService.repairPictures(nn,rId);
+            }
             return ApiRestResponse.success();
         }else{//否则，就更换
             //先根据传回的Cid查找出厂家名称
@@ -113,6 +121,7 @@ public class IndexController {
             //得到厂家名称后，把旧的零件信息和更新内容插入ys_change
             changeReq.setOldFactory(fName);
             equipmentService.saveOldComponent(changeReq);
+//
 
 //            //判断新的厂家名字是否存在
 //            if(factoryService.getFid(changeReq.getNewFactory(),2)!=0){

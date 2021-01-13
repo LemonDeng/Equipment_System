@@ -3,6 +3,7 @@ package com.ys.model.request;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.models.auth.In;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Date;
 
@@ -27,6 +28,16 @@ public class ComponentChangeReq {
 
 
     private Date time;
+
+    private MultipartFile[] file;
+
+    public MultipartFile[] getFile() {
+        return file;
+    }
+
+    public void setFile(MultipartFile[] file) {
+        this.file = file;
+    }
 
     public Date getTime() {
         return time;
