@@ -11,8 +11,8 @@ import java.io.IOException;
 
 /**
  * @Description:
- * @Auther: zhangyuechuang
- * @Date: 2021/01/13/11:27
+ * @Auther: dengzhili
+ * @Date: 2021/01/13/19:27
  */
 public class QRcodeUtils {
     public static BufferedImage generateQrCode(String content, String logoPath) {

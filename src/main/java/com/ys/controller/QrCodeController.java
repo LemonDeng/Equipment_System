@@ -27,8 +27,8 @@ import java.util.List;
 
 /**
  * @Description:
- * @Auther: zhangyuechuang
- * @Date: 2021/01/13/11:33
+ * @Auther: dengzhili
+ * @Date: 2021/01/13/19:33
  */
 @Controller
 public class QrCodeController {
@@ -36,8 +36,8 @@ public class QrCodeController {
      * @description: 获取二维码的方法,通过IO流返回,不再写入磁盘通过路径展示
      * @param response
      * @return void
-     * @author: Ycc
-     * @date: 2020/8/12
+     * @author: dengzhili
+     * @date: 2021/1/13
      * */
     @Autowired
     ComponentService componentService;
