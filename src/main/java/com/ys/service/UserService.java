@@ -44,8 +44,8 @@ public interface UserService {
     PageInfo listForAmin(UserVo userVo);
 
     List<User> getAllUser();
-
-    User findByName(UserVo userVo);
+/*筛选查询*/
+    User findByName(User user);
 
     /*******************/
     /*得到所有人员*/

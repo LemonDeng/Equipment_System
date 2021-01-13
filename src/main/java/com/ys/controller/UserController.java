@@ -9,6 +9,7 @@ import com.ys.model.pojo.User;
 import com.ys.model.pojo.UserVo;
 import com.ys.model.request.AddUserReq;
 import com.ys.model.request.UpdateUserReq;
+import com.ys.model.vo.ComponentVo;
 import com.ys.model.vo.UserLoginVO;
 import com.ys.service.UserService;
 import com.ys.service.impl.TokenService;
@@ -20,6 +21,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -41,6 +43,7 @@ public class UserController {
 
     @Autowired
     TokenService tokenService;
+
     /**
      *登录
      * @param userVo
@@ -207,18 +210,30 @@ public class UserController {
 
 
     /**
-     *
-     * @param userVo
+     * 筛选查询用户
+     * @param user
      * @return
      */
     @ApiOperation("筛选查询用户")
     @PostMapping("/getUser")
     @ResponseBody
-    public ApiRestResponse getUser(@RequestBody UserVo userVo)
+    public ApiRestResponse getUser(@RequestBody User user)
     {
-        User user = userService.findByName(userVo);
-        return ApiRestResponse.success(user);
+        User currentUser = userService.findByName(user);
+        return ApiRestResponse.success(currentUser);
     }
+
+    /**
+     * 二维码
+     */
+  /*  public ComponentVo saveComponent(ComponentVo componentVo)
+    {
+        // 为每个用户生成一个唯一的二维码
+        String qrCodePath = "C://user" + componentVo.getcCode() + "qrcode.png";
+        // muxin_qrcode:[username]
+        qrCodeUtils.createQRCode(qrCodePath, "muxin_qrcode:" + "设备名称："+componentVo.geteName()+"零件名称："+componentVo.getcName()+"零件编码"+componentVo.getcCode()  );
+        MultipartFile qrCodeFile = FileUtils.fileToMultipart(qrCodePath);
+    }*/
 }
 
 

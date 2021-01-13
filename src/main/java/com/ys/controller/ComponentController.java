@@ -10,6 +10,7 @@ import com.ys.model.request.RepairSearchReq;
 import com.ys.model.request.UpComponentReq;
 import com.ys.model.vo.SearchVo;
 import com.ys.service.ComponentService;
+import com.ys.service.QrCodeService;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +28,8 @@ import java.util.List;
 public class ComponentController {
     @Autowired
     ComponentService componentService;
-
+@Autowired
+    QrCodeService qrCodeService;
     /**
      * 新增零件信息
      *
@@ -129,5 +131,6 @@ public class ComponentController {
 
         return new ApiRestResponse().success(object1);
     }
+
 
 }

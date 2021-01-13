@@ -118,19 +118,32 @@ public class UserServiceImpl  implements UserService {
     }
 
     /**
-     * 用户筛选查询
-     * @param userVo
+     * 筛选查询
+     * @param user
      * @return
      */
     @Override
-    public User findByName(UserVo userVo)
+    public User findByName(User user)
     {
-        User currentUser = userMapper.selectByNameAndWorkNumber(userVo.getuName(),userVo.getuWorknumber());
-        if (currentUser == null)
+        /*通过姓名查询*/
+        User user1 = userMapper.selectByName(user.getuName());
+        /*通过工号查询*/
+        User user2 = userMapper.selectByWorknumber(user.getuWorknumber());
+        /*通过姓名和工号一起查询*/
+        User user3 = userMapper.selectByNameAndWorkNumber(user.getuName(), user.getuWorknumber());
+        if (user1 != null)
         {
-            throw new YsLjException(YsLjExceptionEnum.NEED_LOGIN);
+            return user1;
+        }else if (user2 !=null)
+        {
+            return user2;
+        }else if (user3 != null)
+        {
+            return user3;
+        }else
+        {
+            throw new YsLjException(YsLjExceptionEnum.NOT_PEOPLE);
         }
-        return currentUser;
     }
 
 

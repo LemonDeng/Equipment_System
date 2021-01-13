@@ -36,6 +36,12 @@
     <sql id="Base_Column_List1">
     c_id, c_name, f_name,c_type,f_type,c_code, lifespan, starttime,  c.f_id,c_location,c.e_id,e_workshop, e_machine, e_name, e_type,e_code
   </sql>
+    <sql id="Base_Column_List2">
+    c_id, c_name, c.e_id,e.e_id,e_name,c_code
+  </sql>
+    <sql id="Base_Column_List3">
+    c_id, c_name, c.e_id,e.e_id,e_name,c_code
+  </sql>
 
     <!--allList-->
     <select id="allList" parameterType="com.ys.model.request.RepairSearchReq" resultType="com.ys.model.vo.ComponentVo">
@@ -273,4 +279,11 @@
         select c_name cName from ys_component
     </select>
     <!--自定义********end-->
+
+    <!--二维码查询的数据-->
+    <select id="qrCode" parameterType="java.lang.Integer" resultType="com.ys.model.pojo.Component">
+        select t1.c_code cCode ,t1.c_name cName,t2.e_name eName
+        from ys_component t1 left join ys_equipment t2  on t1.e_id=t2.e_id
+        where t1.e_id = #{eId}
+    </select>
 </mapper>

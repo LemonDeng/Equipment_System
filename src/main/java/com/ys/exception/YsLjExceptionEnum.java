@@ -29,6 +29,7 @@ public enum YsLjExceptionEnum {
     DELETE_COMPONENT_FAILED(10026, "删除失败,当前零件不存在"),
     MAINTAIN_UPDATE_FAILED(10028, "更新失败,维护人员不存在"),
     REPAIR_UPDATE_FAILED(10029, "更新失败,维修人员不存在"),
+    NOT_PEOPLE(10030, "查询的人员不存在"),
     SYSTEM_ERROR(20000, "系统异常，请从控制台或日志中查看具体错误信息");
     /**
      * 异常码
