@@ -21,7 +21,7 @@ public class QrCodeServiceImpl implements QrCodeService {
 
     @Override
     public Component qrCodeImp(Component component) {
-        List<Component> components = componentMapper.qrCode(component.geteId());
+        List<Component> components = componentMapper.qrCode(component.geteCode());
         if (components==null || components.size() == 0 ){
             return null;
         }

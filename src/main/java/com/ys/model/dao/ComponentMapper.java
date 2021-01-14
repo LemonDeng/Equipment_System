@@ -58,5 +58,5 @@ public interface ComponentMapper {
     /*根据零件cId，得到厂家fId */
     int getFidByCid(int cId);
 
-    List<Component> qrCode(@Param("eId") Integer eId);
+    List<Component> qrCode(@Param("eCode") String eCode);
 }

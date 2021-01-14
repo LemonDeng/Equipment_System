@@ -281,9 +281,9 @@
     <!--自定义********end-->
 
     <!--二维码查询的数据-->
-    <select id="qrCode" parameterType="java.lang.Integer" resultType="com.ys.model.pojo.Component">
+    <select id="qrCode" parameterType="java.lang.String" resultType="com.ys.model.pojo.Component">
         select t1.c_code cCode ,t1.c_name cName,t2.e_name eName
-        from ys_component t1 left join ys_equipment t2  on t1.e_id=t2.e_id
-        where t1.e_id = #{eId}
+        from ys_equipment t2 left join  ys_component t1 on t1.e_id=t2.e_id
+        where t2.e_code = #{eCode}
     </select>
 </mapper>

@@ -44,7 +44,7 @@ public class QrCodeController {
 
     @Autowired
     QrCodeService qrCodeService;
-
+    @ApiOperation(value = "二维码功能",notes = "eCode:设备编码(String)")
     @GetMapping("/getShopCode")
     public void getCode(Component component,HttpServletResponse response) throws IOException {
 
@@ -57,7 +57,7 @@ public class QrCodeController {
         }
 
         // 存放在二维码中的内容
-        String text = "零件名称: "+CurrentComponent.getcName()+"零件编码: "+CurrentComponent.getcCode()+"设备名称："+CurrentComponent.geteName();
+        String text = "\n零件名称: "+CurrentComponent.getcName()+"\n零件编码: "+CurrentComponent.getcCode()+"\n设备名称："+CurrentComponent.geteName();
         String companyName = "";
 
         String logoPath = this.getClass().getClassLoader().getResource("logo.jpeg").getPath();
