@@ -16,7 +16,6 @@ public class AdminFilterConfig {
     public FilterRegistrationBean adminFilterConfig() {
         FilterRegistrationBean filterRegistrationBean = new FilterRegistrationBean();
         filterRegistrationBean.setFilter(adminFilter());
-        filterRegistrationBean.addUrlPatterns("/user/deleteUser");
         filterRegistrationBean.addUrlPatterns("/user/listUser");
         filterRegistrationBean.addUrlPatterns("/user/updateUser");
         filterRegistrationBean.addUrlPatterns("/user/getUser");

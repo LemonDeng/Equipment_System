@@ -121,10 +121,10 @@ public class UserController {
             return ApiRestResponse.error(YsLjExceptionEnum.NEED_LOGIN);
         }
 
-        //校验是否是管理员
-        boolean adminRole = userService.checkAdminRole(currentUser);
+        //校验是否是超级管理员
+        boolean adminRole = userService.superAdmin(currentUser);
         if (adminRole) {
-            //是管理员，执行操作
+            //是超级管理员，执行操作
            userService.addUser(addUserReq);
             return ApiRestResponse.success();
         }else
@@ -140,9 +140,28 @@ public class UserController {
      */
     @PostMapping("/deleteUser")
     @ResponseBody
-    public ApiRestResponse deleteCategory(@RequestBody UserVo userVo) {
-        userService.deleteUser(userVo);
-        return ApiRestResponse.success();
+    public ApiRestResponse deleteCategory(@RequestBody User user,HttpServletRequest request,HttpSession session) {
+
+        String token  = "";
+
+        for (Cookie cookie : request.getCookies())
+            if (cookie.getName().equals("token")) {
+                token = cookie.getValue();
+                break;
+            }
+        User currentUser = (User) session.getAttribute(token);
+        if (currentUser == null)
+        {
+            return ApiRestResponse.error(YsLjExceptionEnum.NEED_LOGIN);
+        }
+        //校验是否是超级管理员
+        boolean adminRole = userService.superAdmin(currentUser);
+        if (adminRole) {
+            //是超级管理员，执行操作
+            userService.deleteUser(user);
+            return ApiRestResponse.success();
+        }
+         return ApiRestResponse.error(YsLjExceptionEnum.NEED_SURPER_ADMIN);
     }
 
     /**
@@ -183,10 +202,10 @@ public class UserController {
             return ApiRestResponse.error(YsLjExceptionEnum.NEED_LOGIN);
         }
 
-        //校验是否是管理员
-        boolean adminRole = userService.checkAdminRole(currentUser);
+        //校验是否是超级管理员
+        boolean adminRole = userService.superAdmin(currentUser);
         if (adminRole) {
-            //是管理员，执行操作
+            //是超级管理员，执行操作
             User user = new User();
             BeanUtils.copyProperties(updateUserReq,user);
             userService.updateInformation(user);
@@ -223,17 +242,6 @@ public class UserController {
         return ApiRestResponse.success(currentUser);
     }
 
-    /**
-     * 二维码
-     */
-  /*  public ComponentVo saveComponent(ComponentVo componentVo)
-    {
-        // 为每个用户生成一个唯一的二维码
-        String qrCodePath = "C://user" + componentVo.getcCode() + "qrcode.png";
-        // muxin_qrcode:[username]
-        qrCodeUtils.createQRCode(qrCodePath, "muxin_qrcode:" + "设备名称："+componentVo.geteName()+"零件名称："+componentVo.getcName()+"零件编码"+componentVo.getcCode()  );
-        MultipartFile qrCodeFile = FileUtils.fileToMultipart(qrCodePath);
-    }*/
 }
 
 

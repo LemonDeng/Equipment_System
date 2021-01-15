@@ -30,6 +30,7 @@ public enum YsLjExceptionEnum {
     MAINTAIN_UPDATE_FAILED(10028, "更新失败,维护人员不存在"),
     REPAIR_UPDATE_FAILED(10029, "更新失败,维修人员不存在"),
     NOT_PEOPLE(10030, "查询的人员不存在"),
+    NEED_SURPER_ADMIN(10031, "无超级管理员权限"),
     SYSTEM_ERROR(20000, "系统异常，请从控制台或日志中查看具体错误信息");
     /**
      * 异常码

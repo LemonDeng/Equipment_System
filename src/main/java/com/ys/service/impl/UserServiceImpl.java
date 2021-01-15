@@ -60,8 +60,8 @@ public class UserServiceImpl  implements UserService {
 
     //删除用户
     @Override
-    public void deleteUser(UserVo userVo) throws YsLjException {
-        User userOld = userMapper.selectByWorknumber(userVo.getuWorknumber());
+    public void deleteUser(User user) throws YsLjException {
+        User userOld = userMapper.selectByWorknumber(user.getuWorknumber());
         //查找不到记录，无法删除,删除失败
         if (userOld == null) {
             throw new YsLjException((YsLjExceptionEnum.DELETE_FAILED));
@@ -75,8 +75,14 @@ public class UserServiceImpl  implements UserService {
 
     @Override
     public boolean checkAdminRole(User user) {
-        //1是普通用户，2是管理员
+        //1是普通用户，2是管理员,3是超级管理员
         return user.getIsadmin().equals(2);
+    }
+
+    @Override
+    public boolean superAdmin(User user) {
+        //1是普通用户，2是管理员,3是超级管理员
+        return user.getIsadmin().equals(3);
     }
 
     //修改用户
@@ -133,12 +139,15 @@ public class UserServiceImpl  implements UserService {
         User user3 = userMapper.selectByNameAndWorkNumber(user.getuName(), user.getuWorknumber());
         if (user1 != null)
         {
+            user1.setuPassword(null);
             return user1;
         }else if (user2 !=null)
         {
+            user2.setuPassword(null);
             return user2;
         }else if (user3 != null)
         {
+            user3.setuPassword(null);
             return user3;
         }else
         {

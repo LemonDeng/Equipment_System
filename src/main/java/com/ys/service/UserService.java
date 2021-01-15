@@ -29,12 +29,16 @@ public interface UserService {
     void addUser(AddUserReq addUserReq);
 
 
-    //删除用户
-    void deleteUser(UserVo userVo) throws YsLjException;
 
+
+
+    //删除用户
+    void deleteUser(User user) throws YsLjException;
 
     boolean checkAdminRole(User user);
 
+
+    boolean superAdmin(User user);
 
     void updateInformation(User updateUserReq);
 

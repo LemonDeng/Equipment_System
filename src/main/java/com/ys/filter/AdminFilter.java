@@ -77,6 +77,22 @@ public class AdminFilter implements Filter {
             out.flush();
             out.close();
         }
+       /* //校验是否是超级管理员
+        boolean surperadminRole = userService.superAdmin(currentUser);
+        if (surperadminRole) {
+            filterChain.doFilter(servletRequest, servletResponse);
+        } else {
+            servletResponse.setContentType("text/html;charset=utf-8");
+            PrintWriter out = new HttpServletResponseWrapper(
+                    (HttpServletResponse) servletResponse).getWriter();
+            out.write("{\n"
+                    + "    \"status\": 100031,\n"
+                    + "    \"msg\": \"无超级管理员权限\",\n"
+                    + "    \"data\": null\n"
+                    + "}");
+            out.flush();
+            out.close();
+        }*/
     }
     @Override
     public void destroy() {
